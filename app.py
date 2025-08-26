@@ -7,24 +7,28 @@ import datetime
 st.markdown(
     """
     <style>
-    /* Gradient background for the entire app */
-    .main {
-        background: linear-gradient(135deg, #000428, #004E92);
+    /* Apply gradient background to full viewport */
+    html, body, #root, .main, .block-container {
+        background: linear-gradient(135deg, #000428, #004E92) !important;
         color: white;
+        height: 100%;
         min-height: 100vh;
-        padding: 25px;
+        margin: 0;
+        padding: 0;
     }
-    /* Custom styles for headers and texts */
-    h1, h2, h3, h4, h5, h6 {
-        color: #e0e0e0;
+    /* Override container backgrounds */
+    .css-18e3th9, .css-145kmo2, .css-1d391kg {
+        background: transparent !important;
     }
-    label, .stSlider > div > div > div {
-        color: #c0c0c0;
+    /* Set heading and label text colors */
+    h1, h2, h3, h4, h5, h6, label, .stMarkdown {
+        color: white;
     }
     </style>
     """,
     unsafe_allow_html=True,
 )
+
 
 # Load the CSV data with caching
 @st.cache_data
