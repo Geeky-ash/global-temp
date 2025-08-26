@@ -7,26 +7,40 @@ import datetime
 st.markdown(
     """
     <style>
-    /* Apply gradient background to full viewport */
-    html, body, #root, .main, .block-container {
-        background: linear-gradient(135deg, #000428, #004E92) !important;
-        color: white;
-        height: 100%;
-        min-height: 100vh;
-        margin: 0;
-        padding: 0;
+    html, body {
+        height: 100% !important;
+        width: 100% !important;
     }
-    /* Override container backgrounds */
-    .css-18e3th9, .css-145kmo2, .css-1d391kg {
+    body {
+        /* Apply the gradient to the entire page */
+        background: linear-gradient(135deg, #000428 0%, #004E92 100%) !important;
+        background-attachment: fixed !important;
+        background-repeat: no-repeat !important;
+        min-height: 100vh !important;
+        min-width: 100vw !important;
+        overflow-x: hidden !important;
+    }
+    /* Make main container backgrounds transparent */
+    .stApp, .block-container, .main, .css-18e3th9, .css-1d391kg {
         background: transparent !important;
     }
-    /* Set heading and label text colors */
-    h1, h2, h3, h4, h5, h6, label, .stMarkdown {
-        color: white;
+    /* Optional: Remove outer padding for a full-screen look */
+    .block-container {
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+    }
+    /* Make scrollbars less obtrusive (optional) */
+    ::-webkit-scrollbar {
+        width: 8px;
+        background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: #003a6d;
+        border-radius: 4px;
     }
     </style>
-    """,
-    unsafe_allow_html=True,
+    """, 
+    unsafe_allow_html=True
 )
 
 
