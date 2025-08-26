@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import datetime
 
-# Inject CSS for gradient background
+# --- CUSTOM CSS FOR FULL BG GRADIENT + GLASS EFFECT ---
 st.markdown(
     """
     <style>
@@ -12,7 +12,6 @@ st.markdown(
         width: 100% !important;
     }
     body {
-        /* Apply the gradient to the entire page */
         background: linear-gradient(135deg, #000428 0%, #004E92 100%) !important;
         background-attachment: fixed !important;
         background-repeat: no-repeat !important;
@@ -20,16 +19,22 @@ st.markdown(
         min-width: 100vw !important;
         overflow-x: hidden !important;
     }
-    /* Make main container backgrounds transparent */
     .stApp, .block-container, .main, .css-18e3th9, .css-1d391kg {
         background: transparent !important;
     }
-    /* Optional: Remove outer padding for a full-screen look */
-    .block-container {
-        padding-top: 2rem;
-        padding-bottom: 2rem;
+    /* Glassmorphism effect for plot containers */
+    .glass-box {
+        background: rgba(255, 255, 255, 0.19);
+        border-radius: 30px;
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.23);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+        border: 1.5px solid rgba(255, 255, 255, 0.19);
+        margin: 2rem auto 2rem auto;
+        padding: 2rem 1.5rem 2rem 1.5rem;
+        max-width: 900px;
     }
-    /* Make scrollbars less obtrusive (optional) */
+    /* Make scrollbar blend in */
     ::-webkit-scrollbar {
         width: 8px;
         background: transparent;
@@ -38,13 +43,16 @@ st.markdown(
         background: #003a6d;
         border-radius: 4px;
     }
+    /* Optional: make headers white for contrast */
+    h1, h2, h3, h4, h5, h6, label, .stMarkdown, .stSlider, .st-bd {
+        color: white !important;
+    }
     </style>
-    """, 
+    """,
     unsafe_allow_html=True
 )
 
-
-# Load the CSV data with caching
+# --- DATA LOAD ---
 @st.cache_data
 def load_data():
     annual_df = pd.read_csv('data/annual.csv')
@@ -59,12 +67,14 @@ st.title("Global Temperature Anomalies Dashboard")
 st.header("Annual Global Temperature Anomalies")
 st.write("Data source: GISTEMP & GCAG combined annual anomalies")
 
+# --- YEAR SLIDER FILTER ---
 min_year = int(annual_df['Year'].min())
 max_year = int(annual_df['Year'].max())
 year_range = st.slider("Select Year Range", min_year, max_year, (min_year, max_year))
 
 filtered_annual = annual_df[(annual_df['Year'] >= year_range[0]) & (annual_df['Year'] <= year_range[1])]
 
+# --- ANNUAL PLOT (WITH GLASS EFFECT) ---
 fig, ax = plt.subplots()
 for source in filtered_annual['Source'].unique():
     source_data = filtered_annual[filtered_annual['Source'] == source]
@@ -74,8 +84,12 @@ ax.set_ylabel('Temperature Anomaly (°C)', color='white')
 ax.legend()
 ax.grid(True, color='gray')
 ax.tick_params(colors='white')
-st.pyplot(fig)
 
+st.markdown('<div class="glass-box">', unsafe_allow_html=True)
+st.pyplot(fig)
+st.markdown('</div>', unsafe_allow_html=True)
+
+# --- MONTHLY PLOT (WITH GLASS EFFECT) ---
 st.header("Monthly Global Temperature Anomalies")
 st.write("Data source: GISTEMP & GCAG combined monthly anomalies")
 
@@ -90,7 +104,7 @@ selected_dates = st.slider(
 )
 
 filtered_monthly = monthly_df[
-    (monthly_df['Date'] >= pd.to_datetime(selected_dates[0])) & 
+    (monthly_df['Date'] >= pd.to_datetime(selected_dates[0])) &
     (monthly_df['Date'] <= pd.to_datetime(selected_dates[1]))
 ]
 
@@ -103,4 +117,7 @@ ax2.set_ylabel('Temperature Anomaly (°C)', color='white')
 ax2.legend()
 ax2.grid(True, color='gray')
 ax2.tick_params(colors='white')
+
+st.markdown('<div class="glass-box">', unsafe_allow_html=True)
 st.pyplot(fig2)
+st.markdown('</div>', unsafe_allow_html=True)
